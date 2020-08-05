@@ -1,6 +1,8 @@
+//import 'dart:async';
 import 'dart:ui';
 
 import 'package:app0/Cloud/barqat_luis.dart';
+//import 'package:app0/Internet/internet.dart';
 import 'package:app0/constants2.dart';
 import 'package:flutter/material.dart';
 import 'package:app0/Screens/Log/components/background.dart';
@@ -24,6 +26,9 @@ class _BodyState extends State<Body> {
   User user;
   DateTime _dateTime;
   final myController = TextEditingController();
+  //StreamSubscription _connectionChangeStream;
+
+  bool isOffline = false;
 
   @override
   void dispose() {
@@ -36,7 +41,17 @@ class _BodyState extends State<Body> {
   void initState() {
     user = widget.user;
     super.initState();
+    /*ConnectionStatusSingleton connectionStatus =
+        ConnectionStatusSingleton.getInstance();
+    _connectionChangeStream =
+        connectionStatus.connectionChange.listen(connectionChanged);*/
   }
+
+  /*void connectionChanged(dynamic hasConnection) {
+    setState(() {
+      isOffline = !hasConnection;
+    });
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -97,37 +112,53 @@ class _BodyState extends State<Body> {
             Container(
               alignment: Alignment.bottomRight,
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              child: FlatButton(
+              child: RaisedButton(
                 // When the user presses the button, show an alert dialog containing
                 // the text that the user has entered into the text field.
                 onPressed: () {
                   String utterance = myController.text.toString().trim();
                   if (utterance.length > 0 && _dateTime != null) {
-                    return showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                            // Retrieve the text the that user has entered by using the
-                            // TextEditingController.
-                            content: Text("Upload Log\?"),
-                            actions: <Widget>[
-                              new FlatButton(
-                                  child: const Text("Confirm"),
-                                  onPressed: () async {
-                                    Navigator.pop(context);
-                                    String log = await BarqatLUIS.luis
-                                        .getResponse(utterance);
-                                    print("LOG0:$log");
-                                    if (log != '') {
-                                      await DatabaseProvider.db
-                                          .updateLog(user.oid, log, _dateTime);
-                                      myController.clear();
-                                      print("Controller cleared");
-                                    }
-                                  })
-                            ]);
-                      },
-                    );
+                    if (!isOffline) {
+                      return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              // Retrieve the text the that user has entered by using the
+                              // TextEditingController.
+                              content: Text("Save Log\?"),
+                              actions: <Widget>[
+                                new FlatButton(
+                                    child: const Text("Confirm"),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      String log = await BarqatLUIS.luis
+                                          .getResponse(utterance);
+                                      print("LOG0:$log");
+                                      if (log != '') {
+                                        await DatabaseProvider.db.updateLog(
+                                            user.oid, log, _dateTime);
+                                        myController.clear();
+                                        print("Controller cleared");
+                                      }
+                                    })
+                              ]);
+                        },
+                      );
+                    } else {
+                      return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                                content: Text("Check Internet connection!"),
+                                actions: <Widget>[
+                                  new FlatButton(
+                                      child: const Text("Ok"),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+                                      }),
+                                ]);
+                          });
+                    }
                   } else {
                     return showDialog(
                       context: context,

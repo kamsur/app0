@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseProvider {
   static const String TABLE_USERS = "users";
@@ -22,6 +23,7 @@ class DatabaseProvider {
   static const String COLUMN_UPLOADED = "uploadStatus";
   static const String TABLE_BLE_GEN = "ble1";
   static const String COLUMN_UUID_DATE = "uuid";
+  static const String COLUMN_OID_OTHER = "other";
   static const String TABLE_BLE_SCAN = "ble2";
   //static const String COLUMN_LOCATION = "location";
   //static const String COLUMN_TFP = "tfp";
@@ -97,28 +99,13 @@ class DatabaseProvider {
           "CREATE TABLE $TABLE_BLE_SCAN ("
           "$COLUMN_OID TEXT,"
           "$COLUMN_UUID_DATE TEXT,"
+          "$COLUMN_OID_OTHER TEXT,"
           "$COLUMN_UPLOADED TEXT"
           ")",
         );
       },
     );
   }
-
-  /*Map<String, String> stringMap(var m) {
-    m.forEach((key, value) {
-      m[key] = value.toString();
-    });
-    return m;
-  }
-
-  List<Map<String, String>> stringMapList(var v) {
-    var temp = [];
-    for (int i = 0; i < v.length(); i++) {
-      temp[i] = v[i];
-      temp[i] = stringMap(temp[i]);
-    }
-    return v.toList();
-  }*/
 
   Future<List> getUsers() async {
     final db = await database;
@@ -449,5 +436,98 @@ class DatabaseProvider {
       };
       await insertLog(logMap);
     }
+  }
+
+  Future<String> getUUIDAtDate(String oid) async {
+    final db = await database;
+    var log;
+    DateTime dateTime = DateTime.now().toUtc();
+    print(dateTime.toIso8601String());
+    String min =
+        ((dateTime.hour * 60 + dateTime.minute) / 10).floor().toString();
+    String date = dateTime.toIso8601String().substring(0, 10) +
+        ('0' * (3 - min.length)) +
+        min;
+    try {
+      log = await db.query(
+        TABLE_BLE_GEN,
+        columns: [COLUMN_OID, COLUMN_UUID_DATE],
+        where: "$COLUMN_OID = ? and $COLUMN_UUID_DATE LIKE '%?'",
+        whereArgs: [oid, date],
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+    print("UUID got");
+    if (log == null || log.isEmpty) {
+      var uuid = Uuid();
+      String uuid1 = uuid.v4().toString();
+      print('UUID: $uuid1');
+      Map<String, String> logMap = {
+        COLUMN_OID: oid,
+        COLUMN_UUID_DATE: (uuid1 + date)
+      };
+      await db.insert(TABLE_BLE_GEN, logMap);
+      print('UUIDlog $logMap inserted');
+      return uuid1;
+    } else {
+      print('UUIDlog already present');
+      String uuid1 = log.toList().first[COLUMN_UUID_DATE];
+      uuid1 = uuid1.substring(0, (uuid1.length - date.length));
+      print('UUID: $uuid1');
+      return uuid1;
+    }
+  }
+
+  Future<String> getUUIDDate(String oid, DateTime dateTime) async {
+    final db = await database;
+    var log;
+    dateTime = dateTime.toUtc();
+    String min =
+        ((dateTime.hour * 60 + dateTime.minute) / 10).floor().toString();
+    String date = dateTime.toIso8601String().substring(0, 10) +
+        ('0' * (3 - min.length)) +
+        min;
+    try {
+      log = await db.query(
+        TABLE_BLE_GEN,
+        columns: [COLUMN_OID, COLUMN_UUID_DATE],
+        where: "$COLUMN_OID = ? and $COLUMN_UUID_DATE LIKE '%?'",
+        whereArgs: [oid, date],
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+    print("UUID got");
+    if (log == null || log.isEmpty) {
+      var uuid = Uuid();
+      String uuid1 = uuid.v4().toString();
+      print('UUID: $uuid1');
+      Map<String, String> logMap = {
+        COLUMN_OID: oid,
+        COLUMN_UUID_DATE: (uuid1 + date)
+      };
+      await db.insert(TABLE_BLE_GEN, logMap);
+      print('UUIDlog $logMap inserted');
+      return uuid1 + date;
+    } else {
+      print('UUIDlog already present');
+      String uuid2 = log.toList().first[COLUMN_UUID_DATE];
+      print('UUID: $uuid2');
+      return uuid2;
+    }
+  }
+
+  Future<void> logAttendance(Map contact, String oid) async {
+    final db = await database;
+    String uuid = await getUUIDDate(oid, DateTime.now().toUtc());
+    Map<String, String> logMap = {
+      COLUMN_OID: oid,
+      COLUMN_UUID_DATE: uuid,
+      COLUMN_OID_OTHER: contact[COLUMN_OID].toString(),
+      COLUMN_UPLOADED: 'N'
+    };
+    await db.insert(TABLE_BLE_SCAN, logMap);
+    print('logMap inserted: $logMap');
   }
 }

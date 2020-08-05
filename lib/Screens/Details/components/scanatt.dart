@@ -26,7 +26,7 @@ class ScanAtt extends StatelessWidget {
           FlatButton.icon(
             onPressed: () {
               if (user.type != CategoryList.CATEGORY_FAMILY) {
-                Scanner(user: user);
+                //Scanner(user: user);
               }
             },
             icon: SvgPicture.asset(

@@ -29,7 +29,10 @@ dependencies:
   #path: ^1.6.4
   flutter_blue: 
     git: https://github.com/kamsur/flutter_blue.git
+  beacon_broadcast: ^0.2.1
+  uuid: ^2.2.0
   qr_flutter: ^3.2.0
+  #connectivity: ^0.4.9
 
   #flutter_ble_lib:
     #git: https://github.com/kamsur/FlutterBleLib.git
