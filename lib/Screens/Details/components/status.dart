@@ -127,8 +127,6 @@ class _StatusState extends State<Status> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                  // Retrieve the text the that user has entered by using the
-                                  // TextEditingController.
                                   content: Text("Confirm Status Change\?"),
                                   actions: <Widget>[
                                     new FlatButton(
@@ -142,14 +140,6 @@ class _StatusState extends State<Status> {
                                             //newUser = temp;
                                             user = temp;
                                           });
-
-                                          /*Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailsScreen(
-                                                      user: newUser,
-                                                    )));*/
                                         }),
                                   ]);
                             });
@@ -158,8 +148,6 @@ class _StatusState extends State<Status> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                                // Retrieve the text the that user has entered by using the
-                                // TextEditingController.
                                 content: Text("Change status first"),
                                 actions: <Widget>[
                                   new FlatButton(
