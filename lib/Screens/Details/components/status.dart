@@ -118,8 +118,6 @@ class _StatusState extends State<Status> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                   child: FlatButton(
-                    // When the user presses the button, show an alert dialog containing
-                    // the text that the user has entered into the text field.
                     onPressed: () {
                       if (newStatus != user.status) {
                         print('newStatus: $newStatus');
@@ -160,12 +158,11 @@ class _StatusState extends State<Status> {
                         );
                       }
                     },
-                    //tooltip: 'Name to be displayed on dashboard',
                     color: kSecondaryColor,
                     child: Text(
                       "Done",
                       style: Theme.of(context).textTheme.button,
-                    ), //Icon(Icons.arrow_forward),
+                    ),
                   ),
                 ),
               ],
@@ -186,15 +183,6 @@ class _StatusState extends State<Status> {
         icon: SvgPicture.asset("assets/icons/back.svg"),
         onPressed: () {
           Navigator.of(context).pop(user);
-          /*newUser != null
-              ? Navigator.of(context).pop(newUser)
-              : Navigator.of(context).pop(user);*/
-          /*Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DetailsScreen(
-                        user: user,
-                      )));*/
         },
       ),
       centerTitle: false,
