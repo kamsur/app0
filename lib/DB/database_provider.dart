@@ -452,8 +452,8 @@ class DatabaseProvider {
       log = await db.query(
         TABLE_BLE_GEN,
         columns: [COLUMN_OID, COLUMN_UUID_DATE],
-        where: "$COLUMN_OID = ? and $COLUMN_UUID_DATE LIKE '%?'",
-        whereArgs: [oid, date],
+        where: "$COLUMN_OID = ? and $COLUMN_UUID_DATE LIKE ?",
+        whereArgs: [oid, '%$date'],
       );
     } catch (e) {
       print(e.toString());
@@ -462,6 +462,8 @@ class DatabaseProvider {
     if (log == null || log.isEmpty) {
       var uuid = Uuid();
       String uuid1 = uuid.v4().toString();
+      uuid1 =
+          uuid1.substring(0, 9) + '0786' + uuid1.substring(13, uuid1.length);
       print('UUID: $uuid1');
       Map<String, String> logMap = {
         COLUMN_OID: oid,
@@ -472,10 +474,10 @@ class DatabaseProvider {
       return uuid1;
     } else {
       print('UUIDlog already present');
-      String uuid1 = log.toList().first[COLUMN_UUID_DATE];
-      uuid1 = uuid1.substring(0, (uuid1.length - date.length));
-      print('UUID: $uuid1');
-      return uuid1;
+      String uuid2 = log.toList().first[COLUMN_UUID_DATE];
+      uuid2 = uuid2.substring(0, (uuid2.length - date.length));
+      print('UUID: $uuid2');
+      return uuid2;
     }
   }
 
@@ -492,8 +494,8 @@ class DatabaseProvider {
       log = await db.query(
         TABLE_BLE_GEN,
         columns: [COLUMN_OID, COLUMN_UUID_DATE],
-        where: "$COLUMN_OID = ? and $COLUMN_UUID_DATE LIKE '%?'",
-        whereArgs: [oid, date],
+        where: "$COLUMN_OID = ? and $COLUMN_UUID_DATE LIKE ?",
+        whereArgs: [oid, '%$date'],
       );
     } catch (e) {
       print(e.toString());
@@ -502,6 +504,8 @@ class DatabaseProvider {
     if (log == null || log.isEmpty) {
       var uuid = Uuid();
       String uuid1 = uuid.v4().toString();
+      uuid1 =
+          uuid1.substring(0, 9) + '0786' + uuid1.substring(13, uuid1.length);
       print('UUID: $uuid1');
       Map<String, String> logMap = {
         COLUMN_OID: oid,
@@ -525,6 +529,29 @@ class DatabaseProvider {
       COLUMN_OID: oid,
       COLUMN_UUID_DATE: uuid,
       COLUMN_OID_OTHER: contact[COLUMN_OID].toString(),
+      COLUMN_UPLOADED: 'N'
+    };
+    await db.insert(TABLE_BLE_SCAN, logMap);
+    print('logMap inserted: $logMap');
+  }
+
+  String getDate(DateTime dateTime) {
+    dateTime = dateTime.toUtc();
+    String min =
+        ((dateTime.hour * 60 + dateTime.minute) / 10).floor().toString();
+    String date = dateTime.toIso8601String().substring(0, 10) +
+        ('0' * (3 - min.length)) +
+        min;
+    return date;
+  }
+
+  Future<void> logUUID(String oid, String uuid, DateTime dateTime) async {
+    String uuid1 = uuid + getDate(dateTime.toUtc());
+    final db = await database;
+    Map<String, String> logMap = {
+      COLUMN_OID: oid,
+      COLUMN_UUID_DATE: uuid1,
+      COLUMN_OID_OTHER: '',
       COLUMN_UPLOADED: 'N'
     };
     await db.insert(TABLE_BLE_SCAN, logMap);

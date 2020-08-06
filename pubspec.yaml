@@ -33,9 +33,6 @@ dependencies:
   uuid: ^2.2.0
   qr_flutter: ^3.2.0
   #connectivity: ^0.4.9
-
-  #flutter_ble_lib:
-    #git: https://github.com/kamsur/FlutterBleLib.git
   http: ^0.12.2
 
 

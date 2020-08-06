@@ -61,6 +61,7 @@ class _QrGenState extends State<QrGen> {
       onWillPop: () {
         if (timer != null) {
           timer.cancel();
+          print('Timer cancelled');
         }
         Navigator.of(context).pop(user);
       },
@@ -99,6 +100,7 @@ class _QrGenState extends State<QrGen> {
           onPressed: () {
             if (timer != null) {
               timer.cancel();
+              print('Timer cancelled');
             }
             Navigator.pop(context);
           }),
