@@ -1,3 +1,5 @@
+//import 'package:app0/Bluetooth/bleScan.dart';
+import 'package:app0/Bluetooth/bleScan.dart';
 import 'package:app0/Screens/Details/components/attendance.dart';
 import 'package:app0/Screens/User/components/category_list.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,7 @@ class ScanAtt extends StatelessWidget {
           FlatButton.icon(
             onPressed: () {
               if (user.type != CategoryList.CATEGORY_FAMILY) {
-                //Scanner(user: user);
+                Bluetooth.ble.scan(user.oid, context);
               }
             },
             icon: SvgPicture.asset(

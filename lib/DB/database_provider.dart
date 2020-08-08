@@ -339,6 +339,7 @@ class DatabaseProvider {
     print("familyOid=$familyOid");
     for (final currentUser in familyOid) {
       print("Current:$currentUser");
+      // ignore: unused_local_variable
       bool t = rest.remove(currentUser);
       List temp = rest;
       Map<String, String> user = {
@@ -442,7 +443,7 @@ class DatabaseProvider {
     final db = await database;
     var log;
     DateTime dateTime = DateTime.now().toUtc();
-    print(dateTime.toIso8601String());
+    print('getUUIDAtDate : ${dateTime.toIso8601String()}');
     String min =
         ((dateTime.hour * 60 + dateTime.minute) / 10).floor().toString();
     String date = dateTime.toIso8601String().substring(0, 10) +
