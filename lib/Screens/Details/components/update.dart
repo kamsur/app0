@@ -6,8 +6,6 @@ import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:app0/DB/database_provider.dart';
 //import 'package:app0/Internet/internet.dart';
-import 'package:app0/components2/qr_gen.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:app0/constants2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,23 +15,22 @@ import 'package:app0/components2/user.dart';
 //import 'package:aad_oauth/aad_oauth.dart';
 
 //This is for Stateful Widget
-class Attendance extends StatefulWidget {
+class Update extends StatefulWidget {
   final User user;
-  const Attendance({
+  const Update({
     Key key,
     @required this.user,
   }) : super(key: key);
   @override
-  _AttendanceState createState() => _AttendanceState();
+  _UpdateState createState() => _UpdateState();
 }
 
-class _AttendanceState extends State<Attendance> {
+class _UpdateState extends State<Update> {
   User user;
   String choice = '';
   //StreamSubscription _connectionChangeStream;
   bool isOffline = false;
-
-  static final Config configB2Cc = new Config(
+  static final Config configB2Cb = new Config(
       "93ea5ca9-6dbc-4e15-99d1-2ae0d20b19a9",
       "ccfd9597-76f1-4246-8f5c-7bca14013308",
       "ccfd9597-76f1-4246-8f5c-7bca14013308 offline_access",
@@ -41,9 +38,31 @@ class _AttendanceState extends State<Attendance> {
       clientSecret: null,
       isB2C: true,
       azureTenantName: "barqat",
-      userFlow: "B2C_1A_SignUpOrSignInWithPhoneOrEmail",
+      userFlow: "B2C_1A_ProfileEditPhoneEmail",
       tokenIdentifier: "UNIQUE IDENTIFIER B");
-  final AadOAuth oauthB2Cc = AadOAuth(configB2Cc);
+  final AadOAuth oauthB2Cb = AadOAuth(configB2Cb);
+  static final Config configB2Cd = new Config(
+      "93ea5ca9-6dbc-4e15-99d1-2ae0d20b19a9",
+      "ccfd9597-76f1-4246-8f5c-7bca14013308",
+      "ccfd9597-76f1-4246-8f5c-7bca14013308 offline_access",
+      "https://barqat.b2clogin.com/oauth2/nativeclient",
+      clientSecret: null,
+      isB2C: true,
+      azureTenantName: "barqat",
+      userFlow: "B2C_1A_PasswordResetEmail",
+      tokenIdentifier: "UNIQUE IDENTIFIER B");
+  final AadOAuth oauthB2Cd = AadOAuth(configB2Cd);
+  static final Config configB2Ce = new Config(
+      "93ea5ca9-6dbc-4e15-99d1-2ae0d20b19a9",
+      "ccfd9597-76f1-4246-8f5c-7bca14013308",
+      "ccfd9597-76f1-4246-8f5c-7bca14013308 offline_access",
+      "https://barqat.b2clogin.com/oauth2/nativeclient",
+      clientSecret: null,
+      isB2C: true,
+      azureTenantName: "barqat",
+      userFlow: "B2C_1A_ChangePhoneNumber",
+      tokenIdentifier: "UNIQUE IDENTIFIER B");
+  final AadOAuth oauthB2Ce = AadOAuth(configB2Ce);
 
   @override
   void initState() {
@@ -65,7 +84,7 @@ class _AttendanceState extends State<Attendance> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var rectSize = Rect.fromLTWH(0.0, 25.0, size.width, size.height - 25);
-    oauthB2Cc.setWebViewScreenSize(rectSize);
+    oauthB2Cb.setWebViewScreenSize(rectSize);
     return Scaffold(
         backgroundColor: kBackgroundColor,
         appBar: buildAppBar(context),
@@ -83,7 +102,7 @@ class _AttendanceState extends State<Attendance> {
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      title: const Text('Scan QR'),
+                      title: const Text('Register ZIPCode'),
                       leading: Radio(
                         value: 'A',
                         groupValue: choice,
@@ -95,7 +114,7 @@ class _AttendanceState extends State<Attendance> {
                       ),
                     ),
                     ListTile(
-                      title: const Text('Show QR'),
+                      title: const Text('Reset Password'),
                       leading: Radio(
                         value: 'B',
                         groupValue: choice,
@@ -107,7 +126,7 @@ class _AttendanceState extends State<Attendance> {
                       ),
                     ),
                     ListTile(
-                      title: const Text('Sign In'),
+                      title: const Text('Change Phone Number'),
                       leading: Radio(
                         value: 'C',
                         groupValue: choice,
@@ -127,27 +146,19 @@ class _AttendanceState extends State<Attendance> {
                     const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 child: RaisedButton(
                   // ignore: missing_return
-                  onPressed: () async {
+                  onPressed: () {
                     print('choice: $choice');
                     switch (choice) {
                       case 'A':
-                        String cameraScanResult = await scanner.scan();
-                        if (cameraScanResult.substring(9, 13) == '0786') {
-                          await DatabaseProvider.db.logUUID(user.oid,
-                              cameraScanResult, DateTime.now().toUtc());
+                        {
+                          login(oauthB2Cb, context);
                         }
                         break;
                       case 'B':
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => QrGen(
-                              user: user,
-                            ),
-                          ),
-                        );
+                        temp(oauthB2Cd, context);
                         break;
                       case 'C':
+                        //login(oauthB2Ce, context);
                         /*if (isOffline) {
                           return showDialog(
                               context: context,
@@ -162,10 +173,10 @@ class _AttendanceState extends State<Attendance> {
                                           }),
                                     ]);
                               });
-                        } else*/
+                        } else
                         {
                           login(oauthB2Cc, context, user.oid);
-                        }
+                        }*/
                         break;
                       default:
                         break;
@@ -216,14 +227,23 @@ class _AttendanceState extends State<Attendance> {
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
 
-  Future<void> login(AadOAuth oAuth, BuildContext context, String oid) async {
+  Future<void> login(AadOAuth oAuth, BuildContext context) async {
     try {
       await oAuth.login();
       String accessToken = await oAuth.getAccessToken();
       int flag = 0;
       try {
-        await DatabaseProvider.db
-            .logAttendance(parseJwtPayLoad(accessToken), oid);
+        Map<String, String> temp = {
+          /*
+          DatabaseProvider.COLUMN_PHONE:
+              parseJwtPayLoad(accessToken)[DatabaseProvider.COLUMN_PHONE]
+                  .toString(),*/
+          DatabaseProvider.COLUMN_ZIPCODE:
+              parseJwtPayLoad(accessToken)[DatabaseProvider.COLUMN_ZIPCODE]
+                  .toString(),
+          DatabaseProvider.COLUMN_OID: user.oid,
+        };
+        await DatabaseProvider.db.updateUser(temp);
         /*print('payloadMap: ${parseJwtPayLoad(accessToken)}');*/
         flag = 1;
       } catch (e) {
@@ -234,6 +254,17 @@ class _AttendanceState extends State<Attendance> {
         await oAuth.logout();
         print('Logged out');
       }
+    } catch (e) {
+      showError(e, context);
+    }
+  }
+
+  Future<void> temp(AadOAuth oAuth, BuildContext context) async {
+    try {
+      await oAuth.login();
+      //showMessage("Logged in successfully!", context);
+      await oAuth.logout();
+      print('Logged out');
     } catch (e) {
       showError(e, context);
     }

@@ -1,12 +1,14 @@
+import 'package:app0/Screens/Details/components/chat.dart';
+import 'package:app0/Screens/Details/components/update.dart';
 import 'package:app0/Screens/User/components/category_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:app0/components2/user.dart';
 import 'package:app0/constants2.dart';
 
-class ChatAndEdit extends StatelessWidget {
+class ChatAndUpdate extends StatelessWidget {
   final User user;
-  const ChatAndEdit({Key key, this.user}) : super(key: key);
+  const ChatAndUpdate({Key key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,16 @@ class ChatAndEdit extends StatelessWidget {
           FlatButton.icon(
             onPressed: () {
               if ((user.type != CategoryList.CATEGORY_FAMILY) &&
-                  (user.type != CategoryList.CATEGORY_DESK)) {}
+                  (user.type != CategoryList.CATEGORY_DESK)) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Chat(
+                      user: user,
+                    ),
+                  ),
+                );
+              }
             },
             icon: SvgPicture.asset(
               "assets/icons/chat.svg",
@@ -41,14 +52,23 @@ class ChatAndEdit extends StatelessWidget {
           Spacer(),
           FlatButton.icon(
             onPressed: () {
-              if (user.type != CategoryList.CATEGORY_FAMILY) {}
+              if (user.type != CategoryList.CATEGORY_FAMILY) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Update(
+                      user: user,
+                    ),
+                  ),
+                );
+              }
             },
             icon: SvgPicture.asset(
               "assets/icons/edit.svg",
               height: 30,
             ),
             label: Text(
-              "Edit Profile",
+              "Update\nProfile",
               style: TextStyle(color: Colors.white),
             ),
           ),

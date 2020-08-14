@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:app0/DB/database_provider.dart';
 import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:uuid/uuid.dart';
 
 class Bluetooth {
   Bluetooth._();
@@ -26,7 +28,7 @@ class Bluetooth {
   static Timer _timerOut;
   static Timer _timerIn;
   static Timer _timer;
-  static Map<String, List<int>> _scanList;
+  static Map<String, List<int>> _scanList = {};
   static int _n = 0;
 
   Future<void> scan(String newOid, BuildContext context) async {
@@ -37,11 +39,15 @@ class Bluetooth {
     bool on = (await flutterBlue2.isAvailable) && (await flutterBlue2.isOn);
     if (!on || on == null) {
       if (_oldOid != newOid) {
-        print("Bluetooth off");
+        showMessage("Bluetooth off", context);
       } else {
         if (canChange) {
           _oldOid = '';
           await stop();
+        } else {
+          showMessage(
+              "One process already underway\nPlease try again nafter a few minutes!",
+              context);
         }
       }
     } else {
@@ -65,6 +71,10 @@ class Bluetooth {
           _oldOid = '';
           await stop();
         }
+      } else {
+        showMessage(
+            "One process already underway\nPlease try again nafter a few minutes!",
+            context);
       }
     }
   }
@@ -84,7 +94,7 @@ class Bluetooth {
     String uuid;
     DateTime now = DateTime.now().toUtc();
     int duration = (10 - now.minute.remainder(10)) * 60 - now.second;
-    if (duration >= 300) {
+    if (duration >= 365) {
       print("Go NOW !");
       _timerIn = Timer.periodic(const Duration(seconds: 120), (Timer t1) async {
         now = DateTime.now().toUtc();
@@ -138,6 +148,7 @@ class Bluetooth {
     await _beaconBroadcast.stop();
     print('Stopped');
     //inProgress = false;
+    _scanList.clear();
     canChange = true;
   }
 
@@ -155,6 +166,7 @@ class Bluetooth {
         doneScanning(oid, uuid, 15);
         if (_n == 4) {
           _timerIn.cancel();
+          compute(oid);
           print("TimerIn cancelled");
           //inProgress = false;
         } else {
@@ -170,6 +182,7 @@ class Bluetooth {
       doneScanning(oid, uuid, 15);
       if (_n == 4) {
         _timerIn.cancel();
+        compute(oid);
         print("TimerIn cancelled");
       } else {
         //inProgress = true;
@@ -178,11 +191,12 @@ class Bluetooth {
     uuid = await DatabaseProvider.db.getUUIDAtDate(oid);
     _n = 0;
     //inProgress = true;
+    await compute(oid);
     doneScanning(oid, uuid, 15);
     _flag = 1;
   }
 
-  static void doneScanning(String oid, String uuid, int seconds) async {
+  static void doneScanning(String oid, String uuidAd, int seconds) async {
     //FlutterBlue flutterBlue = FlutterBlue.instance;
     try {
       bool on = (await _flutterBlue.isAvailable) && (await _flutterBlue.isOn);
@@ -192,21 +206,37 @@ class Bluetooth {
         _flutterBlue.startScan(timeout: Duration(seconds: seconds));
         print("Here");
         // Listen to scan results
-        _flutterBlue.scanResults.listen((results) {
+        _flutterBlue.scanResults.listen((results) async {
           // do something with scan results
           for (ScanResult r in results) {
             //BluetoothDevice bluetoothDevice = r.device;
             //print('bluetoothDeviceID: ${bluetoothDevice.id}');
-            print('RSSI:${r.rssi}');
-            //print('buff: ${r.buff}');
+            if (r.buff[30] == 190 && r.buff[31] == 172) {
+              var uuid = Uuid();
+              String uuidScan = uuid
+                  .v4(options: {'random': r.buff.sublist(32, 48)}).toString();
+              print('UUIDScan: $uuidScan');
+              print('RSSI: ${r.rssi}');
+              if (uuidScan.substring(9, 13) == '0786') {
+                _scanList.containsKey(uuidScan)
+                    ? _scanList[uuidScan].contains(r.rssi)
+                        ? _scanList[uuidScan]
+                            [_scanList[uuidScan].indexOf(r.rssi)] = r.rssi
+                        : _scanList[uuidScan].add(r.rssi)
+                    : _scanList.addAll({
+                        uuidScan: [r.rssi]
+                      });
+              }
+            }
+            /*
             AdvertisementData advertisementData = r.advertisementData;
-            print('ManufacturerData: ${advertisementData.manufacturerData}');
+            print('ManufacturerData: ${advertisementData.manufacturerData}');*/
           }
         });
       }
       _timer = Timer(Duration(seconds: seconds), () async {
         await _flutterBlue.stopScan();
-        doneAdvertising(uuid, 30);
+        doneAdvertising(uuidAd, 30);
       });
     } catch (e) {
       print(e);
@@ -247,5 +277,40 @@ class Bluetooth {
         print('timer cancelled');
       }
     }
+  }
+
+  static Future<void> compute(String oid) async {
+    if (_scanList.isNotEmpty) {
+      _scanList.forEach((key, value) async {
+        int rssi = 0;
+        List<int> temp = value;
+        if (value.length > 3) {
+          temp.sort();
+          List<int> temp2 = temp.sublist(value.length - 3);
+          rssi = ((temp2[0] + temp2[1] + temp2[2]) / 3).ceil();
+        } else if (value.length == 3) {
+          rssi = ((value[0] + value[1] + value[2]) / 3).ceil();
+        } else {
+          for (final i in value) {
+            rssi = rssi + i;
+          }
+          rssi = (rssi / value.length).ceil();
+        }
+        await DatabaseProvider.db
+            .logUUID(oid, key, DateTime.now().toUtc(), rssi);
+      });
+      _scanList.clear();
+    }
+  }
+
+  static void showMessage(String text, BuildContext context) {
+    var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
+      new FlatButton(
+          child: const Text("Ok"),
+          onPressed: () {
+            //Navigator.pop(context);
+          })
+    ]);
+    showDialog(context: context, builder: (BuildContext context) => alert);
   }
 }

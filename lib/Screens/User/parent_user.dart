@@ -97,6 +97,7 @@ class ParentUser extends StatelessWidget {
       String accessToken = await oAuth.getAccessToken();
       int flag = 0;
       try {
+        print('payloadMap: ${Body.parseJwtPayLoad(accessToken)}');
         await DatabaseProvider.db
             .setupDatabase(Body.parseJwtPayLoad(accessToken), type);
         await DatabaseProvider.db.registerFamily();

@@ -9,9 +9,9 @@ class DatabaseProvider {
   static const String COLUMN_OID = "oid";
   static const String COLUMN_DISPLAY_NAME = "displayName";
   //static const String COLUMN_CITY = "city";
-  static const String COLUMN_COUNTRY = "country";
-  static const String COLUMN_PHONE = "extension_PhoneNo";
-  static const String COLUMN_EMAILS = "emails";
+  static const String COLUMN_COUNTRY = "countryCode";
+  static const String COLUMN_PHONE = "phoneNumber";
+  static const String COLUMN_EMAIL = "email";
   //static const String COLUMN_STATE = "state";
   static const String COLUMN_ZIPCODE = "postalCode";
   static const String COLUMN_FAMILY = "family";
@@ -22,8 +22,8 @@ class DatabaseProvider {
   static const String COLUMN_DATE = "date";
   static const String COLUMN_UPLOADED = "uploadStatus";
   static const String TABLE_BLE_GEN = "ble1";
-  static const String COLUMN_UUID_DATE = "uuid";
-  static const String COLUMN_OID_OTHER = "other";
+  static const String COLUMN_UUID_DATE = "uuidDate";
+  static const String COLUMN_RSSI = "rssi";
   static const String TABLE_BLE_SCAN = "ble2";
   //static const String COLUMN_LOCATION = "location";
   //static const String COLUMN_TFP = "tfp";
@@ -32,7 +32,7 @@ class DatabaseProvider {
     COLUMN_DISPLAY_NAME,
     /* COLUMN_CITY,*/ COLUMN_COUNTRY,
     COLUMN_PHONE,
-    COLUMN_EMAILS,
+    COLUMN_EMAIL,
     /*COLUMN_STATE,*/ COLUMN_ZIPCODE,
     COLUMN_FAMILY,
     COLUMN_TYPE,
@@ -73,7 +73,7 @@ class DatabaseProvider {
           //"$COLUMN_CITY TEXT,"
           "$COLUMN_COUNTRY TEXT,"
           "$COLUMN_PHONE TEXT,"
-          "$COLUMN_EMAILS TEXT,"
+          "$COLUMN_EMAIL TEXT,"
           //"$COLUMN_STATE TEXT,"
           "$COLUMN_ZIPCODE TEXT,"
           "$COLUMN_FAMILY TEXT,"
@@ -99,7 +99,7 @@ class DatabaseProvider {
           "CREATE TABLE $TABLE_BLE_SCAN ("
           "$COLUMN_OID TEXT,"
           "$COLUMN_UUID_DATE TEXT,"
-          "$COLUMN_OID_OTHER TEXT,"
+          "$COLUMN_RSSI INTEGER,"
           "$COLUMN_UPLOADED TEXT"
           ")",
         );
@@ -116,7 +116,7 @@ class DatabaseProvider {
         COLUMN_DISPLAY_NAME,
         /* COLUMN_CITY,*/ COLUMN_COUNTRY,
         COLUMN_PHONE,
-        COLUMN_EMAILS,
+        COLUMN_EMAIL,
         /*COLUMN_STATE,*/ COLUMN_ZIPCODE,
         COLUMN_FAMILY,
         COLUMN_TYPE,
@@ -145,7 +145,7 @@ class DatabaseProvider {
           COLUMN_DISPLAY_NAME,
           /* COLUMN_CITY,*/ COLUMN_COUNTRY,
           COLUMN_PHONE,
-          COLUMN_EMAILS,
+          COLUMN_EMAIL,
           /*COLUMN_STATE,*/ COLUMN_ZIPCODE,
           COLUMN_FAMILY,
           COLUMN_TYPE,
@@ -223,10 +223,26 @@ class DatabaseProvider {
       COLUMN_DISPLAY_NAME: payloadMap[COLUMN_DISPLAY_NAME] == null
           ? ''
           : payloadMap[COLUMN_DISPLAY_NAME].toString(),
-      COLUMN_COUNTRY: type != 'FB' ? payloadMap[COLUMN_COUNTRY].toString() : '',
-      COLUMN_PHONE: type != 'FB' ? payloadMap[COLUMN_PHONE].toString() : '',
-      COLUMN_EMAILS: type != 'FB' ? payloadMap[COLUMN_EMAILS].join(',') : '',
-      COLUMN_ZIPCODE: type != 'FB' ? payloadMap[COLUMN_ZIPCODE].toString() : '',
+      COLUMN_COUNTRY: type != 'FB'
+          ? payloadMap[COLUMN_COUNTRY] == null
+              ? ''
+              : payloadMap[COLUMN_COUNTRY].toString()
+          : '',
+      COLUMN_PHONE: type != 'FB'
+          ? payloadMap[COLUMN_PHONE] == null
+              ? ''
+              : payloadMap[COLUMN_PHONE].toString()
+          : '',
+      COLUMN_EMAIL: type != 'FB'
+          ? payloadMap[COLUMN_EMAIL] == null
+              ? ''
+              : payloadMap[COLUMN_EMAIL].toString()
+          : '',
+      COLUMN_ZIPCODE: type != 'FB'
+          ? payloadMap[COLUMN_ZIPCODE] == null
+              ? ''
+              : payloadMap[COLUMN_ZIPCODE].toString()
+          : '',
       COLUMN_FAMILY: '',
       COLUMN_TYPE: type == 'P'
           ? 'Parent'
@@ -285,7 +301,7 @@ class DatabaseProvider {
           COLUMN_DISPLAY_NAME,
           /* COLUMN_CITY,*/ COLUMN_COUNTRY,
           COLUMN_PHONE,
-          COLUMN_EMAILS,
+          COLUMN_EMAIL,
           /*COLUMN_STATE,*/ COLUMN_ZIPCODE,
           COLUMN_FAMILY,
           COLUMN_TYPE,
@@ -314,7 +330,7 @@ class DatabaseProvider {
         COLUMN_DISPLAY_NAME,
         /* COLUMN_CITY,*/ COLUMN_COUNTRY,
         COLUMN_PHONE,
-        COLUMN_EMAILS,
+        COLUMN_EMAIL,
         /*COLUMN_STATE,*/ COLUMN_ZIPCODE,
         COLUMN_FAMILY,
         COLUMN_TYPE,
@@ -525,11 +541,10 @@ class DatabaseProvider {
 
   Future<void> logAttendance(Map contact, String oid) async {
     final db = await database;
-    String uuid = await getUUIDDate(oid, DateTime.now().toUtc());
-    Map<String, String> logMap = {
+    Map<String, dynamic> logMap = {
       COLUMN_OID: oid,
-      COLUMN_UUID_DATE: uuid,
-      COLUMN_OID_OTHER: contact[COLUMN_OID].toString(),
+      COLUMN_UUID_DATE: contact[COLUMN_UUID_DATE].toString(),
+      COLUMN_RSSI: 0,
       COLUMN_UPLOADED: 'N'
     };
     await db.insert(TABLE_BLE_SCAN, logMap);
@@ -546,13 +561,14 @@ class DatabaseProvider {
     return date;
   }
 
-  Future<void> logUUID(String oid, String uuid, DateTime dateTime) async {
-    String uuid1 = uuid + getDate(dateTime.toUtc());
+  Future<void> logUUID(String oid, String uuid, DateTime dateTime,
+      [int rssi = 0]) async {
+    String uuidDate = uuid + getDate(dateTime.toUtc());
     final db = await database;
-    Map<String, String> logMap = {
+    Map<String, dynamic> logMap = {
       COLUMN_OID: oid,
-      COLUMN_UUID_DATE: uuid1,
-      COLUMN_OID_OTHER: '',
+      COLUMN_UUID_DATE: uuidDate,
+      COLUMN_RSSI: rssi,
       COLUMN_UPLOADED: 'N'
     };
     await db.insert(TABLE_BLE_SCAN, logMap);

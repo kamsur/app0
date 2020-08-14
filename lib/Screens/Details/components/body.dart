@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app0/constants2.dart';
 import 'package:app0/components2/user.dart';
 
-import 'chat_and_edit.dart';
+import 'chat_and_update.dart';
 import 'log_and_status.dart';
 import 'user_image.dart';
 import 'scanatt.dart';
@@ -96,7 +96,7 @@ class _BodyState extends State<Body> {
                 ],
               ),
             ),
-            ChatAndEdit(user: user),
+            ChatAndUpdate(user: user),
             ScanAtt(user: user),
             Upload(user: user),
           ],

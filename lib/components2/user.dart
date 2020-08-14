@@ -2,14 +2,14 @@ import 'package:app0/Screens/User/components/category_list.dart';
 import 'package:app0/DB/database_provider.dart';
 
 class User {
-  final String oid, zipcode, emails, phone;
+  final String oid, postalCode, email, phoneNumber;
   final String displayName, type, status, image;
 
   User(
       {this.oid,
-      this.zipcode,
-      this.emails,
-      this.phone,
+      this.postalCode,
+      this.email,
+      this.phoneNumber,
       this.displayName,
       this.type,
       this.status,
@@ -19,9 +19,9 @@ class User {
 User toUser(var current) {
   User user = User(
     oid: current[DatabaseProvider.COLUMN_OID].toString(),
-    zipcode: current[DatabaseProvider.COLUMN_ZIPCODE].toString(),
-    emails: current[DatabaseProvider.COLUMN_EMAILS].toString(),
-    phone: current[DatabaseProvider.COLUMN_PHONE].toString(),
+    postalCode: current[DatabaseProvider.COLUMN_ZIPCODE].toString(),
+    email: current[DatabaseProvider.COLUMN_EMAIL].toString(),
+    phoneNumber: current[DatabaseProvider.COLUMN_PHONE].toString(),
     displayName: current[DatabaseProvider.COLUMN_DISPLAY_NAME].toString(),
     type: current[DatabaseProvider.COLUMN_TYPE] == 'Parent'
         ? CategoryList.CATEGORY_PARENT
@@ -45,9 +45,9 @@ User toUser(var current) {
 Future<User> changeStatus(User old, String newStatus) async {
   User changed = User(
       oid: old.oid,
-      zipcode: old.zipcode,
-      emails: old.emails,
-      phone: old.phone,
+      postalCode: old.postalCode,
+      email: old.email,
+      phoneNumber: old.phoneNumber,
       displayName: old.displayName,
       type: old.type,
       status: newStatus,

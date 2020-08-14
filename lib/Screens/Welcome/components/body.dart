@@ -17,7 +17,7 @@ class Body extends StatelessWidget {
       clientSecret: null,
       isB2C: true,
       azureTenantName: "barqat",
-      userFlow: "B2C_1_SU_1",
+      userFlow: "B2C_1A_SignUpOrSignInWithPhone",
       tokenIdentifier: "UNIQUE IDENTIFIER A");
 
   //You can have as many B2C flows as you want
@@ -80,7 +80,6 @@ class Body extends StatelessWidget {
       String accessToken = await oAuth.getAccessToken();
       int flag = 0;
       try {
-        //print(parseJwtHeader(accessToken));
         //print(parseJwtPayLoad(accessToken));
         await DatabaseProvider.db
             .setupDatabase(parseJwtPayLoad(accessToken), 'P');

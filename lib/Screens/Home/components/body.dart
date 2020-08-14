@@ -4,59 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:app0/Screens/Home/components/background.dart';
 import 'package:app0/Screens/Loading/loading_screen.dart';
 //import 'package:flutter_svg/svg.dart';
+import 'package:app0/constants.dart';
 import 'package:app0/components/rounded_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app0/DB/database_provider.dart';
-
-/*class Body extends StatelessWidget {
-  final Map data;
-  const Body({
-    Key key,
-    @required this.data,
-  }) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    // This size provide us total height and width of our screen
-    print(data);
-    return Background(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "ACCESS TOKEN PAYLOAD",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.05),
-            Text(
-              "$data",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            /*SvgPicture.asset(
-              "assets/icons/stethescope.svg",
-              height: size.height * 0.45,
-            ),*/
-            SizedBox(height: size.height * 0.05),
-            RoundedButton(
-              text: "NEXT",
-              press: () async {
-                await _setAccepted(true);
-                Navigator.pushReplacementNamed(context, '/app0');
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _setAccepted(bool status) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('accepted', status);
-    print("Accepted set");
-  }
-}*/
 
 //This is for Stateful Widget
 class Body extends StatefulWidget {
@@ -92,7 +43,7 @@ class _BodyState extends State<Body> {
       data = await DatabaseProvider.db.getUser(user);
     }
     user = data[DatabaseProvider.COLUMN_DISPLAY_NAME].toString() == ''
-        ? data[DatabaseProvider.COLUMN_EMAILS].toString()
+        ? data[DatabaseProvider.COLUMN_EMAIL].toString()
         : data[DatabaseProvider.COLUMN_DISPLAY_NAME].toString();
     setState(() {
       bool status = prefs.getBool('entered');
@@ -115,7 +66,7 @@ class _BodyState extends State<Body> {
     if (data == null) {
       _display();
     } else {
-      user = data[DatabaseProvider.COLUMN_EMAILS].join(',').toString();
+      user = data[DatabaseProvider.COLUMN_EMAIL];
       loading = false;
       entered = false;
     }
@@ -148,7 +99,8 @@ class _BodyState extends State<Body> {
             ),
             Container(
               alignment: Alignment.bottomRight,
-              child: FlatButton(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              child: RaisedButton(
                 // When the user presses the button, show an alert dialog containing
                 // the text that the user has entered into the text field.
                 onPressed: () {
@@ -193,15 +145,16 @@ class _BodyState extends State<Body> {
                   }
                 },
                 //tooltip: 'Name to be displayed on dashboard',
-                child: Text("Done"), //Icon(Icons.arrow_forward),
+                child: Text("Done"),
+                textColor: kPrimaryLightColor,
+                color: kPrimaryColor, //Icon(Icons.arrow_forward),
               ),
             ),
-
-            /*SvgPicture.asset(
-              "assets/icons/stethescope.svg",
-              height: size.height * 0.45,
-            ),*/
-
+            Text(
+              "Please update your profile upon login to register\nyour postal code/ZIP Code. It helps us in\nkeeping track of\nnumber of users using this app region-wise.\nYour actual location at any time is not tracked.",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(
               text: "ACCEPT",
