@@ -10,9 +10,9 @@ import 'package:app0/DB/database_provider.dart';
 
 class Body extends StatelessWidget {
   static final Config configB2Ca = new Config(
-      "TENANT_ID_HERE",
-      "APPLICATION_ID_HERE",
-      "APPLICATION_ID_HERE offline_access",
+      "93ea5ca9-6dbc-4e15-99d1-2ae0d20b19a9",
+      "ccfd9597-76f1-4246-8f5c-7bca14013308",
+      "ccfd9597-76f1-4246-8f5c-7bca14013308 offline_access",
       "https://barqat.b2clogin.com/oauth2/nativeclient",
       clientSecret: null,
       isB2C: true,
