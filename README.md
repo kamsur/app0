@@ -1,6 +1,6 @@
 # app0
 
-LAZARUS app project.A cross platform Flutter based mobile application that works on top of Bluetooth low energy contact tracing to log human contacts, even when Bluetooth is not activated, with user's consent.
+LAZARUS app project. A cross platform Flutter based mobile application that works on top of Bluetooth low energy contact tracing to log human contacts, even when Bluetooth is not activated, with user's consent.
 Video link for short demo: https://youtu.be/za8qsJncbUw
 Long demo link: https://youtu.be/X13k4GPePLo
 Google drive link for full resolution pictures: https://drive.google.com/drive/folders/1Hfn0mpAozTuFT7BC10Q-0TcQInDwpVDJ?usp=sharing
