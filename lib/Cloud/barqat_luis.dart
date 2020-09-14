@@ -42,7 +42,7 @@ class BarqatLUIS {
     var response = await http.get(request);
     Map<String, dynamic> mapJson = json.decode(response.body);
     Map<String, dynamic> prediction = mapJson['prediction'];
-    if (prediction['topIntent'] == 'Calendar.logEntry') {
+    if (prediction['topIntent'] == 'DailyLog') {
       return json.encode(prediction['entities']); //entities as json string
     } else {
       return '';
