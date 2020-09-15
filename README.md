@@ -7,4 +7,5 @@ Google drive link for full resolution pictures: https://drive.google.com/drive/f
 Google drive link for in-depth technical description:
 https://drive.google.com/file/d/1FAfog03n6oaSx2l7GCfcMewcm2JtR7zv/view?usp=sharing
 Webpage for carrying user to healthcare bot: https://github.com/kamsur/LazarusWeb
-Azure function: https://github.com/kamsur/BarqatFunctions 
+Azure function: https://github.com/kamsur/BarqatFunctions (python based)
+Azure function: https://github.com/kamsur/FunctionsJava (Java based)
