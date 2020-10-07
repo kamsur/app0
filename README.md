@@ -25,3 +25,4 @@ Other tools used:
 5. Microsoft Healthcare Bot
 6. Google Cloud Firestore
 7. QR code plugin for Flutter
+8. Sqflite plugin for Flutter
