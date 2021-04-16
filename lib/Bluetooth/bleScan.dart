@@ -305,7 +305,7 @@ class Bluetooth {
 
   static void showMessage(String text, BuildContext context) {
     var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
-      new FlatButton(
+      new TextButton(
           child: const Text("Ok"),
           onPressed: () {
             //Navigator.pop(context);
