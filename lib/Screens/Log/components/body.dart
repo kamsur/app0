@@ -127,7 +127,7 @@ class _BodyState extends State<Body> {
                               // TextEditingController.
                               content: Text("Save Log\?"),
                               actions: <Widget>[
-                                new FlatButton(
+                                new TextButton(
                                     child: const Text("Confirm"),
                                     onPressed: () async {
                                       Navigator.pop(context);
@@ -151,7 +151,7 @@ class _BodyState extends State<Body> {
                             return AlertDialog(
                                 content: Text("Check Internet connection!"),
                                 actions: <Widget>[
-                                  new FlatButton(
+                                  new TextButton(
                                       child: const Text("Ok"),
                                       onPressed: () async {
                                         Navigator.pop(context);
@@ -168,7 +168,7 @@ class _BodyState extends State<Body> {
                             // TextEditingController.
                             content: Text("Enter valid log and date"),
                             actions: <Widget>[
-                              new FlatButton(
+                              new TextButton(
                                   child: const Text("Ok"),
                                   onPressed: () {
                                     Navigator.pop(context);

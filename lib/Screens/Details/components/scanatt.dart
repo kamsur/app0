@@ -87,22 +87,6 @@ class _ScanAttState extends State<ScanAtt> {
               ],
             ),
           ),
-          /*
-          FlatButton.icon(
-            onPressed: () {
-              if (user.type != CategoryList.CATEGORY_FAMILY) {
-                Bluetooth.ble.scan(user.oid, context);
-              }
-            },
-            icon: SvgPicture.asset(
-              "assets/icons/bluetooth.svg",
-              height: 18,
-            ),
-            label: Text(
-              "Start/Stop\nScan",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),*/
           Text(
             "Start/Stop\nScan",
             style: TextStyle(color: Colors.white),
@@ -110,7 +94,7 @@ class _ScanAttState extends State<ScanAtt> {
           SizedBox(width: kDefaultPadding / 2),
           // it will cover all available spaces
           Spacer(),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () {
               if (widget.user.type != CategoryList.CATEGORY_FAMILY) {
                 Navigator.push(

@@ -125,7 +125,7 @@ class _AttendanceState extends State<Attendance> {
                 alignment: Alignment.bottomRight,
                 padding:
                     const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                child: RaisedButton(
+                child: ElevatedButton(
                   // ignore: missing_return
                   onPressed: () async {
                     print('choice: $choice');
@@ -155,7 +155,7 @@ class _AttendanceState extends State<Attendance> {
                                 return AlertDialog(
                                     content: Text("Check Internet connection!"),
                                     actions: <Widget>[
-                                      new FlatButton(
+                                      new TextButton(
                                           child: const Text("Ok"),
                                           onPressed: () async {
                                             Navigator.pop(context);
@@ -171,7 +171,7 @@ class _AttendanceState extends State<Attendance> {
                         break;
                     }
                   },
-                  color: kSecondaryColor,
+                  //color: kSecondaryColor,
                   child: Text(
                     "Go",
                     style: Theme.of(context).textTheme.button,
@@ -207,7 +207,7 @@ class _AttendanceState extends State<Attendance> {
   void showMessage(String text, BuildContext context) {
     //final context = navigatorKey.currentState.overlay.context;
     var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
-      new FlatButton(
+      new TextButton(
           child: const Text("Ok"),
           onPressed: () {
             Navigator.pop(context);

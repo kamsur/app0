@@ -24,7 +24,7 @@ class ChatAndUpdate extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () {
               if ((user.type != CategoryList.CATEGORY_FAMILY) &&
                   (user.type != CategoryList.CATEGORY_DESK)) {
@@ -50,7 +50,7 @@ class ChatAndUpdate extends StatelessWidget {
           SizedBox(width: kDefaultPadding / 2),
           // it will cover all available spaces
           Spacer(),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () {
               if (user.type != CategoryList.CATEGORY_FAMILY) {
                 Navigator.push(

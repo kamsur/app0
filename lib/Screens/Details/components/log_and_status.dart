@@ -38,7 +38,7 @@ class _LogAndStatusState extends State<LogAndStatus> {
       ),
       child: Row(
         children: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () async {
               if ((user.type != CategoryList.CATEGORY_FAMILY) &&
                   (user.type != CategoryList.CATEGORY_DESK)) {
@@ -64,7 +64,7 @@ class _LogAndStatusState extends State<LogAndStatus> {
           //SizedBox(width: kDefaultPadding / 2),
           // it will cover all available spaces
           Spacer(),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () {
               if (user.type != CategoryList.CATEGORY_FAMILY) {
                 Navigator.of(context)

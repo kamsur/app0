@@ -100,7 +100,7 @@ class _BodyState extends State<Body> {
             Container(
               alignment: Alignment.bottomRight,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              child: RaisedButton(
+              child: ElevatedButton(
                 // When the user presses the button, show an alert dialog containing
                 // the text that the user has entered into the text field.
                 onPressed: () {
@@ -114,7 +114,7 @@ class _BodyState extends State<Body> {
                             // TextEditingController.
                             content: Text("Display Name:\n$name"),
                             actions: <Widget>[
-                              new FlatButton(
+                              new TextButton(
                                   child: const Text("Confirm"),
                                   onPressed: () async {
                                     await updateName(name);
@@ -134,7 +134,7 @@ class _BodyState extends State<Body> {
                             // TextEditingController.
                             content: Text("Enter valid name"),
                             actions: <Widget>[
-                              new FlatButton(
+                              new TextButton(
                                   child: const Text("Ok"),
                                   onPressed: () {
                                     Navigator.pop(context);
@@ -145,9 +145,11 @@ class _BodyState extends State<Body> {
                   }
                 },
                 //tooltip: 'Name to be displayed on dashboard',
-                child: Text("Done"),
-                textColor: kPrimaryLightColor,
-                color: kPrimaryColor, //Icon(Icons.arrow_forward),
+                child: Text("Done",
+                        style: TextStyle(color: kPrimaryLightColor,backgroundColor: kPrimaryColor)
+                        ),
+                /*textColor: kPrimaryLightColor,
+                color: kPrimaryColor,*/ //Icon(Icons.arrow_forward),
               ),
             ),
             Text(

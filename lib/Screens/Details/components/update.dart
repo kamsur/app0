@@ -144,7 +144,7 @@ class _UpdateState extends State<Update> {
                 alignment: Alignment.bottomRight,
                 padding:
                     const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                child: RaisedButton(
+                child: ElevatedButton(
                   // ignore: missing_return
                   onPressed: () {
                     print('choice: $choice');
@@ -166,7 +166,7 @@ class _UpdateState extends State<Update> {
                                 return AlertDialog(
                                     content: Text("Check Internet connection!"),
                                     actions: <Widget>[
-                                      new FlatButton(
+                                      new TextButton(
                                           child: const Text("Ok"),
                                           onPressed: () async {
                                             Navigator.pop(context);
@@ -182,7 +182,7 @@ class _UpdateState extends State<Update> {
                         break;
                     }
                   },
-                  color: kSecondaryColor,
+                  //color: kSecondaryColor,
                   child: Text(
                     "Go",
                     style: Theme.of(context).textTheme.button,
@@ -218,7 +218,7 @@ class _UpdateState extends State<Update> {
   void showMessage(String text, BuildContext context) {
     //final context = navigatorKey.currentState.overlay.context;
     var alert = new AlertDialog(content: new Text(text), actions: <Widget>[
-      new FlatButton(
+      new TextButton(
           child: const Text("Ok"),
           onPressed: () {
             Navigator.pop(context);

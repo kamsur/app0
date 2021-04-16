@@ -117,7 +117,7 @@ class _StatusState extends State<Status> {
                   alignment: Alignment.bottomRight,
                   padding:
                       const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       if (newStatus != user.status) {
                         print('newStatus: $newStatus');
@@ -127,7 +127,7 @@ class _StatusState extends State<Status> {
                               return AlertDialog(
                                   content: Text("Confirm Status Change\?"),
                                   actions: <Widget>[
-                                    new FlatButton(
+                                    new TextButton(
                                         child: const Text("Confirm"),
                                         onPressed: () async {
                                           Navigator.pop(context);
@@ -148,7 +148,7 @@ class _StatusState extends State<Status> {
                             return AlertDialog(
                                 content: Text("Change status first"),
                                 actions: <Widget>[
-                                  new FlatButton(
+                                  new TextButton(
                                       child: const Text("Ok"),
                                       onPressed: () {
                                         Navigator.pop(context);
@@ -158,7 +158,7 @@ class _StatusState extends State<Status> {
                         );
                       }
                     },
-                    color: kSecondaryColor,
+                    //color: kSecondaryColor,
                     child: Text(
                       "Done",
                       style: Theme.of(context).textTheme.button,
