@@ -8,7 +8,7 @@ class BarqatTA {
       'https://centralindia.api.cognitive.microsoft.com/text/analytics/v2.1/entities';
   static const String CONTENT_TYPE = 'application/json';
   static const String ACCEPT = 'application/json';
-  static const String SUBSCRIPTION_KEY = '9b5da21f9a0d45419f54b687f6513df4';
+  static const String SUBSCRIPTION_KEY = '';//add key here
   BarqatTA._();
   static final BarqatTA ta = BarqatTA._();
   Future<void> postResponse(String id, String language, String text) async {
