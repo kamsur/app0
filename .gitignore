@@ -33,6 +33,10 @@
 # Web related
 lib/generated_plugin_registrant.dart
 
+# Cloud related
+lib\Cloud\barqat_luis.dart
+lib\Cloud\barqat_ta.dart
+
 # Symbolication related
 app.*.symbols
 
