@@ -8,8 +8,8 @@ class BarqatLUIS {
   //'https://centralindia.api.cognitive.microsoft.com/text/analytics/v2.1/entities';
   static const ENDPOINT =
       'https://barqatluis.cognitiveservices.azure.com'; //the slash after .com is already given in query
-  static const APP_ID = '';//app_id here
-  static const String KEY = '';//key here
+  static const APP_ID = 'a9996e19-047b-4241-b044-e58e22147898';
+  static const String KEY = 'df26232b0e1d442fbb468af0aecbaadc';
   static const QUERY =
       '$ENDPOINT/luis/prediction/v3.0/apps/$APP_ID/slots/production/predict?subscription-key=$KEY&verbose=false&show-all-intents=false&log=true&query=';
   BarqatLUIS._();
