@@ -2,14 +2,16 @@
 
 LAZARUS app project. A cross-platform Flutter based mobile application that uses alternative solutions (some of which implement AI) on top of Bluetooth low energy contact tracing, to keep record of human-to-human contacts, even when Bluetooth is not activated. The app can also make physical and mental health assessments, with user's consent, to predict possible causes of illness, by using cloud(Azure)-based healthcare chatbot, text-analytics and NLP service.
 
-Video link for short demo: https://youtu.be/za8qsJncbUw
-
-Long demo link: https://youtu.be/X13k4GPePLo
-
-Google drive link for full resolution pictures: https://drive.google.com/drive/folders/1Hfn0mpAozTuFT7BC10Q-0TcQInDwpVDJ?usp=sharing
-
-Google drive link for in-depth description:
-https://docs.google.com/presentation/d/1u7hhSGgKJzNaJ2VDuBkLJaiZnG9WL11f/edit?usp=sharing&ouid=104042064728424758020&rtpof=true&sd=true
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-1.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-2.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-3.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-4.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-5.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-6.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-7.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-8.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-9.png)
+![](https://github.com/kamsur/app0/blob/master/VISH202011475/VISH202011475-10.png)
 
 Webpage for carrying user to healthcare bot: https://github.com/kamsur/LazarusWeb
 
