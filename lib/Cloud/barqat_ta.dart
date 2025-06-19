@@ -32,7 +32,7 @@ class BarqatTA {
   request.headers.set('Content-Type', 'application/json');
   request.headers.set('Accept', 'application/json');
   request.headers
-      .set('Ocp-Apim-Subscription-Key', '9b5da21f9a0d45419f54b687f6513df4');
+      .set('Ocp-Apim-Subscription-Key', 'KEY_HERE');
   //request.add(utf8.encode(json.encode(jsonMap)));
   //request.add(jsonEncode(jsonMap));
 
